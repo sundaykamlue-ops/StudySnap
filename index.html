@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eef2ff">
+  <meta name="description" content="StudySnap ผู้ช่วยจัดการการบ้าน ตารางเรียน และเวลาอ่านหนังสือ">
+  <title>StudySnap — เรียนดีขึ้น งานไม่ค้าง</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" data-page="dashboard" aria-label="StudySnap หน้าหลัก">
+        <span class="brand-icon">📖</span>
+        <span><strong>StudySnap</strong><small>เรียนดีขึ้น งานไม่ค้าง</small></span>
+      </a>
+      <nav class="nav-list" aria-label="เมนูหลัก">
+        <button class="nav-item active" data-page="dashboard"><span>⌂</span> หน้าหลัก</button>
+        <button class="nav-item" data-page="timetable"><span>▦</span> ตารางเรียน</button>
+        <button class="nav-item" data-page="tasks"><span>☷</span> การบ้าน</button>
+        <button class="nav-item" data-page="focus"><span>◷</span> โฟกัสโหมด</button>
+        <button class="nav-item" data-page="stats"><span>▥</span> สถิติ</button>
+        <button class="nav-item" data-page="settings"><span>⚙</span> ตั้งค่า</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="cat-illustration">🐱📚</div>
+        <p>สู้ ๆ นะ!<br>นายทำได้ 💜</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">YOUR STUDY BUDDY ✨</p>
+          <h1 id="greeting">สวัสดี! 👋</h1>
+          <p id="todayDate" class="muted"></p>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-button" id="quickAddBtn" title="เพิ่มการบ้าน" aria-label="เพิ่มการบ้าน">＋</button>
+          <div class="profile-avatar" id="avatarInitial">S</div>
+        </div>
+      </header>
+
+      <section class="page-view active" id="page-dashboard">
+        <div class="hero-banner">
+          <div>
+            <span class="pill">วันใหม่ โอกาสใหม่ 🌷</span>
+            <h2>ค่อย ๆ ทำทีละนิด<br>ก็เข้าใกล้เป้าหมายได้</h2>
+            <p>จัดการงานให้เป็นระบบ แล้วอย่าลืมพักด้วยนะ</p>
+          </div>
+          <div class="hero-art" aria-hidden="true">📚<span>🌱</span><b>🐱</b></div>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="card progress-card">
+            <div class="section-title"><h2>⭐ ความสำเร็จของวันนี้</h2><span class="soft-icon">✦</span></div>
+            <div class="progress-layout">
+              <div><strong class="big-number" id="progressCount">0 / 0</strong><span class="muted"> งานเสร็จแล้ว</span></div>
+              <div class="ring" id="progressRing"><div><strong id="progressPercent">0%</strong></div></div>
+            </div>
+            <div class="progress-track"><div id="progressBar"></div></div>
+            <p class="encouragement" id="progressMessage">เริ่มจากงานเล็ก ๆ สักงานก็ได้นะ 💪</p>
+          </section>
+
+          <section class="card stats-card">
+            <div class="section-title"><h2>📈 ภาพรวมของฉัน</h2></div>
+            <div class="mini-stats">
+              <div class="mini-stat mint"><span>✓</span><strong id="completedTotal">0</strong><small>งานที่เสร็จ</small></div>
+              <div class="mini-stat blue"><span>◷</span><strong id="focusTotal">0 นาที</strong><small>เวลาโฟกัส</small></div>
+              <div class="mini-stat yellow"><span>⭐</span><strong id="xpTotal">0 XP</strong><small>คะแนนสะสม</small></div>
+              <div class="mini-stat pink"><span>📝</span><strong id="pendingTotal">0</strong><small>งานที่ต้องทำ</small></div>
+            </div>
+          </section>
+
+          <section class="card timetable-card">
+            <div class="section-title"><h2>📅 ตารางเรียนวันนี้</h2><button class="text-button" data-page="timetable">ดูทั้งหมด →</button></div>
+            <div id="todaySchedule" class="schedule-list"></div>
+          </section>
+
+          <section class="card focus-preview">
+            <div class="section-title"><h2>⏱️ Focus Timer</h2><button class="text-button" data-page="focus">เปิดโฟกัส →</button></div>
+            <p class="muted">ตั้งใจเรียนทีละช่วง แล้วพักให้เพียงพอ 🌿</p>
+            <div class="timer-preview" id="dashboardTimer">25:00</div>
+            <div class="timer-actions"><button class="primary-button" id="dashboardStart">▶ เริ่ม</button><button class="secondary-button" id="dashboardReset">↻ รีเซ็ต</button></div>
+          </section>
+        </div>
+
+        <section class="card homework-preview">
+          <div class="section-title"><h2>📝 การบ้านของฉัน</h2><button class="primary-button small" id="dashboardAddTask">＋ เพิ่มงาน</button></div>
+          <div class="filter-row" id="dashboardFilters">
+            <button class="filter-chip active" data-filter="all">ทั้งหมด</button>
+            <button class="filter-chip" data-filter="pending">ที่ต้องทำ</button>
+            <button class="filter-chip" data-filter="done">เสร็จแล้ว</button>
+          </div>
+          <div id="dashboardTaskList" class="task-list"></div>
+          <p class="empty-state" id="dashboardEmpty">ยังไม่มีการบ้าน ลองเพิ่มงานแรกของคุณดูสิ 🌸</p>
+        </section>
+
+        <div class="goal-banner"><span class="goal-icon">🎯</span><div><strong>เป้าหมายของฉัน</strong><p id="goalSummary">ตั้งเป้าหมายเล็ก ๆ แล้วค่อย ๆ ทำให้สำเร็จ</p></div><button class="text-button" data-page="settings">ตั้งค่า →</button></div>
+      </section>
+
+      <section class="page-view" id="page-tasks">
+        <div class="page-heading"><div><p class="eyebrow">STAY ON TRACK</p><h2>การบ้านของฉัน 📝</h2><p class="muted">รวมงานทั้งหมดไว้ในที่เดียว</p></div><button class="primary-button" id="tasksAddBtn">＋ เพิ่มการบ้าน</button></div>
+        <div class="card">
+          <div class="task-toolbar">
+            <input id="taskSearch" type="search" placeholder="ค้นหาชื่องานหรือวิชา…" aria-label="ค้นหาการบ้าน">
+            <select id="taskFilter" aria-label="กรองการบ้าน"><option value="all">งานทั้งหมด</option><option value="pending">ที่ต้องทำ</option><option value="done">เสร็จแล้ว</option><option value="overdue">เลยกำหนด</option></select>
+          </div>
+          <div id="fullTaskList" class="task-list"></div>
+          <p id="fullTaskEmpty" class="empty-state">ยังไม่มีงานในรายการ</p>
+        </div>
+      </section>
+
+      <section class="page-view" id="page-timetable">
+        <div class="page-heading"><div><p class="eyebrow">YOUR WEEKLY PLAN</p><h2>ตารางเรียน 📅</h2><p class="muted">จัดตารางให้เหมาะกับสัปดาห์ของคุณ</p></div><button class="primary-button" id="addClassBtn">＋ เพิ่มวิชา</button></div>
+        <div class="day-tabs" id="dayTabs"></div>
+        <section class="card"><div class="section-title"><h2 id="scheduleDayTitle">ตารางเรียน</h2><span class="pill">Weekly timetable</span></div><div id="scheduleList" class="schedule-list"></div><p id="scheduleEmpty" class="empty-state">วันนี้ยังไม่มีวิชาเรียน เพิ่มวิชาได้เลย 🌼</p></section>
+      </section>
+
+      <section class="page-view" id="page-focus">
+        <div class="page-heading"><div><p class="eyebrow">ONE THING AT A TIME</p><h2>โฟกัสโหมด 🌿</h2><p class="muted">เลือกงานหนึ่งอย่าง แล้วให้เวลากับมันเต็มที่</p></div></div>
+        <div class="focus-page-grid">
+          <section class="card focus-main">
+            <span class="pill">FOCUS TIMER</span>
+            <h2 id="focusTaskLabel">เวลาสำหรับตัวคุณเอง</h2>
+            <div class="timer-face"><div class="timer-ring"><span id="focusTimer">25:00</span><small>นาที : วินาที</small></div></div>
+            <div class="timer-actions centered"><button class="primary-button" id="focusStart">▶ เริ่ม</button><button class="secondary-button" id="focusReset">↻ รีเซ็ต</button></div>
+            <div class="timer-settings"><label for="focusMinutes">ระยะเวลา</label><select id="focusMinutes"><option value="15">15 นาที</option><option value="25" selected>25 นาที</option><option value="45">45 นาที</option><option value="60">60 นาที</option></select></div>
+            <label class="field-label" for="focusTaskSelect">กำลังทำการบ้าน (ไม่บังคับ)</label><select id="focusTaskSelect"><option value="">โฟกัสเรื่องของฉัน</option></select>
+          </section>
+          <section class="card">
+            <div class="section-title"><h2>🌷 เคล็ดลับโฟกัส</h2></div>
+            <ul class="tips-list"><li>เก็บสิ่งที่รบกวนออกจากโต๊ะ</li><li>เลือกทำทีละงาน ไม่ต้องทำทุกอย่างพร้อมกัน</li><li>พักสายตาและดื่มน้ำเป็นระยะ</li><li>เมื่อจบเซสชัน ให้บันทึกผลตามจริง</li></ul>
+            <div class="focus-history"><h3>เซสชันล่าสุด</h3><div id="focusHistory" class="history-list"></div><p id="focusHistoryEmpty" class="muted">ยังไม่มีเซสชันที่บันทึกไว้</p></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page-view" id="page-stats">
+        <div class="page-heading"><div><p class="eyebrow">LITTLE STEPS ADD UP</p><h2>สถิติการเรียน 📊</h2><p class="muted">ดูความคืบหน้าจากข้อมูลที่คุณบันทึกไว้</p></div></div>
+        <div class="stats-overview">
+          <div class="card stat-big"><span>📝</span><small>งานที่เสร็จทั้งหมด</small><strong id="statsCompleted">0</strong></div>
+          <div class="card stat-big"><span>⏱️</span><small>เวลาโฟกัสทั้งหมด</small><strong id="statsFocus">0 นาที</strong></div>
+          <div class="card stat-big"><span>⭐</span><small>XP สะสม</small><strong id="statsXP">0</strong></div>
+        </div>
+        <section class="card"><div class="section-title"><h2>เวลาโฟกัส 7 วันล่าสุด</h2><span class="pill">นาที</span></div><div id="weeklyChart" class="weekly-chart"></div><p class="muted chart-note">กราฟนี้คำนวณจากเซสชันที่บันทึกใน StudySnap เท่านั้น</p></section>
+        <section class="card"><div class="section-title"><h2>📚 งานแยกตามวิชา</h2></div><div id="subjectStats" class="subject-stats"></div><p id="subjectStatsEmpty" class="empty-state">เพิ่มและทำการบ้านเพื่อดูสถิติของคุณ</p></section>
+      </section>
+
+      <section class="page-view" id="page-settings">
+        <div class="page-heading"><div><p class="eyebrow">MAKE IT YOURS</p><h2>ตั้งค่า ⚙️</h2><p class="muted">ปรับ StudySnap ให้เข้ากับตัวคุณ</p></div></div>
+        <section class="card settings-card">
+          <h3>👤 โปรไฟล์</h3>
+          <form id="settingsForm" class="settings-form">
+            <label class="field-label" for="displayName">ชื่อที่แสดง</label><input id="displayName" maxlength="30" placeholder="เช่น Sunday">
+            <label class="field-label" for="studyGoal">เป้าหมายการเรียน</label><input id="studyGoal" maxlength="100" placeholder="เช่น อ่านหนังสือวันละ 30 นาที">
+            <label class="field-label" for="defaultFocus">เวลาโฟกัสเริ่มต้น</label><select id="defaultFocus"><option value="15">15 นาที</option><option value="25">25 นาที</option><option value="45">45 นาที</option><option value="60">60 นาที</option></select>
+            <button class="primary-button" type="submit">บันทึกการตั้งค่า</button>
+          </form>
+        </section>
+        <section class="card settings-card">
+          <h3>💾 ข้อมูลของฉัน</h3>
+          <p class="muted">ข้อมูลเวอร์ชันนี้เก็บไว้ในเบราว์เซอร์ของอุปกรณ์นี้ ยังไม่มีการซิงก์ข้ามอุปกรณ์</p>
+          <div class="settings-actions"><button class="secondary-button" id="exportDataBtn">ดาวน์โหลดข้อมูลสำรอง</button><button class="danger-button" id="clearDataBtn">ลบข้อมูลทั้งหมด</button></div>
+        </section>
+        <section class="card settings-card">
+          <h3>🔒 ความเป็นส่วนตัว</h3>
+          <p class="muted">StudySnap เวอร์ชันทดลองนี้ไม่ต้องสมัครสมาชิก และไม่ส่งข้อมูลการบ้านไปยังเซิร์ฟเวอร์ หากใช้เครื่องร่วมกับผู้อื่น ควรระวังข้อมูลที่บันทึกไว้</p>
+        </section>
+      </section>
+
+      <footer class="app-footer">Made with 💜 for your better days · StudySnap 1.0</footer>
+    </main>
+  </div>
+
+  <nav class="mobile-nav" aria-label="เมนูมือถือ">
+    <button class="active" data-page="dashboard"><span>⌂</span><small>หน้าหลัก</small></button>
+    <button data-page="timetable"><span>▦</span><small>ตารางเรียน</small></button>
+    <button data-page="tasks"><span>☷</span><small>การบ้าน</small></button>
+    <button data-page="focus"><span>◷</span><small>โฟกัส</small></button>
+    <button data-page="stats"><span>▥</span><small>สถิติ</small></button>
+  </nav>
+
+  <dialog id="taskDialog" class="modal">
+    <form id="taskForm" class="modal-form">
+      <div class="modal-heading"><div><p class="eyebrow">NEW TASK</p><h2 id="taskDialogTitle">เพิ่มการบ้าน 📝</h2></div><button type="button" class="close-button" data-close="taskDialog" aria-label="ปิด">×</button></div>
+      <input type="hidden" id="editTaskId">
+      <label class="field-label" for="taskTitle">ชื่องาน *</label><input id="taskTitle" required maxlength="100" placeholder="เช่น ทำแบบฝึกหัดหน้า 25">
+      <label class="field-label" for="taskSubject">วิชา</label><input id="taskSubject" maxlength="50" placeholder="เช่น คณิตศาสตร์">
+      <label class="field-label" for="taskDueDate">วันกำหนดส่ง</label><input id="taskDueDate" type="date">
+      <label class="field-label" for="taskPriority">ความสำคัญ</label><select id="taskPriority"><option value="medium">ปานกลาง</option><option value="high">สูง</option><option value="low">ต่ำ</option></select>
+      <label class="field-label" for="taskDetails">รายละเอียด (ไม่บังคับ)</label><textarea id="taskDetails" rows="3" maxlength="500" placeholder="จดสิ่งที่ต้องทำเพิ่มเติม…"></textarea>
+      <div class="modal-actions"><button type="button" class="secondary-button" data-close="taskDialog">ยกเลิก</button><button type="submit" class="primary-button">บันทึกงาน</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="classDialog" class="modal">
+    <form id="classForm" class="modal-form">
+      <div class="modal-heading"><div><p class="eyebrow">TIMETABLE</p><h2 id="classDialogTitle">เพิ่มวิชา 📚</h2></div><button type="button" class="close-button" data-close="classDialog" aria-label="ปิด">×</button></div>
+      <input type="hidden" id="editClassId">
+      <label class="field-label" for="className">ชื่อวิชา *</label><input id="className" required maxlength="60" placeholder="เช่น วิทยาศาสตร์">
+      <label class="field-label" for="classDay">วันเรียน</label><select id="classDay"><option value="1">วันจันทร์</option><option value="2">วันอังคาร</option><option value="3">วันพุธ</option><option value="4">วันพฤหัสบดี</option><option value="5">วันศุกร์</option><option value="6">วันเสาร์</option><option value="0">วันอาทิตย์</option></select>
+      <div class="two-fields"><div><label class="field-label" for="classStart">เวลาเริ่ม</label><input id="classStart" type="time" value="08:00" required></div><div><label class="field-label" for="classEnd">เวลาเลิก</label><input id="classEnd" type="time" value="09:00" required></div></div>
+      <label class="field-label" for="classRoom">ห้องเรียน (ไม่บังคับ)</label><input id="classRoom" maxlength="30" placeholder="เช่น 2-3">
+      <div class="modal-actions"><button type="button" class="secondary-button" data-close="classDialog">ยกเลิก</button><button type="submit" class="primary-button">บันทึกวิชา</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
